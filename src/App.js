@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import { waitForElementToBeRemoved } from '@testing-library/react';
+// import { waitForElementToBeRemoved } from '@testing-library/react';
 
 //리액트야 Subject라는 이름의 태그를 나는 만들꺼야.
 class Subject extends Component { //사용자 정의 태그
@@ -68,18 +68,15 @@ class ContentCreate extends Component {
     desc:''
   }
   changeFormHandler(ev){
-    
     this.setState({[ev.target.name]:ev.target.value});
   }
-  
     render(){
       return (
         <article>
           <form onSubmit={function(ev){
             ev.preventDefault();
             this.props.onSubmit(this.state);
-          }.bind(this)}></form>
-          <form>
+          }.bind(this)}>
             <p><input type="text" placeholder="title" name="title" value={this.state.title} onChange={this.changeFormHandler.bind(this)}></input></p>
             <p><textarea placeholder="description" name="desc" value={this.state.desc} onChange={this.changeFormHandler.bind(this)}></textarea></p>
             <p><input type="submit"></input></p>
@@ -89,7 +86,7 @@ class ContentCreate extends Component {
     }
 }
 class App extends Component {
-  last_content_id=3;
+  last_content_id= 3;
   state = {
     mode:'read',
     selected_content_id:3,
@@ -118,15 +115,16 @@ class App extends Component {
       desc:'Hello, React'
     }}></Content>
   }else if(this.state.mode === 'create'){
-    return <ContentCreate onSubmit={function(){
+    return <ContentCreate onSubmit={function(formData){
+      console.log(formData);
       this.last_content_id = this.last_content_id + 1;
-      FormData = this.last_content_id;
-      var newContent = Object.assign([],this.state.contents);
+      formData.id = this.last_content_id;
+      var newContents = Object.assign([], this.state.contents);
       newContents.push(formData);
       this.setState({
         contents:newContents,
         selected_content_id:this.last_content_id,
-        mode:"read"
+        mode:'read'
       });
     }.bind(this)}></ContentCreate>
   }
